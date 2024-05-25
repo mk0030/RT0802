@@ -25,7 +25,7 @@ def generate_ca_certificate():
     return private_key, cert
 
 ca_private_key, ca_cert = generate_ca_certificate()
-revoked_certificates = set()
+crl = set()
 
 # Fonction pour émettre des certificats
 def issue_certificate(csr_pem):
@@ -34,10 +34,10 @@ def issue_certificate(csr_pem):
     return cert.public_bytes(Encoding.PEM).decode('utf-8')
 
 def revoke_certificate(serial_number):
-    revoked_certificates.add(serial_number)
+    crl.add(serial_number)
 
 def is_certificate_revoked(serial_number):
-    return serial_number in revoked_certificates
+    return serial_number in crl
 
 # Callback pour la connexion MQTT
 def on_connect(client, userdata, flags, rc):
